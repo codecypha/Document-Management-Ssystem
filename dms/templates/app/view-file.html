@@ -1,0 +1,245 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block header %}
+ <!-- DataTables -->
+ <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+ <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+ <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+ <script src="{% static 'dist/js/pages/hide.js' %}"></script>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Department</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active"><i class="fas fa-folder-open" style="color: #ff922b;"></i>Department</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+{% endblock %}
+
+<!-- Use for Data Tables -->
+{% block table %}
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+ 
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-10 order-2 order-md-1">
+    
+            <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="exampleInputBorderWidth2">File Name</label>
+            
+                  <input  class="custom-select form-control-border border-width-2" name='v1' value='{{file_name}}' disabled>
+                  </div>
+              </div>
+
+          </div>
+         <div class="row">
+              <div class="col-md-10">
+          <div class="form-group">
+              <label for="exampleInputBorderWidth2">Tags</label>
+              {% render_field form.tags class="custom-select form-control-border border-width-2" id="retention_id"  name='retentions' disabled='disabled'%}
+
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-group">
+              <label for="exampleInputBorderWidth2">Signed By</label>
+              {% render_field form.signed_by class="custom-select form-control-border border-width-2" id="retention_id"  name='retentions' disabled='disabled' %}
+
+          </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+            <label for="exampleInputBorderWidth2">Document ID</label>
+            <!-- {% render_field form.document_id class="custom-select form-control-border border-width-2" id="retention_id"  name='retentions' disabled='disabled' %} -->
+            <input type="text" class="custom-select form-control-border border-width-2" id="retention_id" value="{{document_id}}" name='retentions' disabled='disabled' >
+        </div>
+    </div>
+  
+         </div>
+     
+          <div class="row" >
+          <div class="col-md-10">
+              <div class="form-group">
+                  <label for="exampleInputBorderWidth2">Notes</label>
+                  {% render_field form.note  class="form-control form-control-border border-width-2" id="exampleInputBorderWidth23" rows='3' disabled='disabled' %}
+              </div>
+      </div>
+
+
+  
+           </div>
+
+           
+          
+          </div>
+
+          
+          <div class="col-12 col-md-12 col-lg-2 order-1 order-md-2">
+            <h6> Reminders: </h6>
+
+            <a href=""  class="text-primary"><i class="fas fa-calendar-alt"></i>Add New Reminder</a>
+            <br>
+            <br>
+            <h6> Shared to: </h6>
+
+            <a href="{%url 'edit_file' fileid %}"  class="text-primary"><i class="fas fa-share-alt"></i>Edit</a>
+            <br>
+            <br>
+            <h6> Retention: </h6>
+
+            <a href=""  class="text-primary"><i class="fas fa-hourglass-end">  </i>Infinite</a>
+
+            <div class="col-12 col-md-12 col-lg-12 order-1 order-md-2">
+            
+                <div class="text-center mt-4 mb-1">
+              <a href="#" class="btn btn-sm btn-primary" style="width: 100%;">  Lock file</a>
+            </div>
+            <div class="text-center mt-3 mb-1">
+         
+                <a href="#" class="btn btn-sm btn-primary" style="width: 100%;">Upload new version</a>
+              </div>
+              <!-- <div class="text-center mt-3 mb-1">
+                <a href="#" class="btn btn-sm btn-primary" style="width: 100%;">Add files</a>
+      
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="card-body">
+        <h5 class="text ">Related Files</h5>
+        <table  class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th></th>
+            
+            <th>File Name</th>
+            <th>Uploaded Date</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for file in versionid %}
+          <tr>
+            <td><a href="{% url 'view_file' file.id %}" > <i class="fas fa-file fa-2x"></i>{{file.upload_file}}</a> 
+            </td>
+               <td>{{file.new_upload}} </td>
+                <td>{{file.entry_date}} </td>
+                
+      
+              <td>   
+          <!-- <a href="#"> <button type="button" class="btn btn-primary btn-xs">Approval</button></a> -->
+          <a href="{{ file.new_upload.url }}" download="{{ file.new_upload.url }}" > <button type="button" class="btn btn-success btn-xs">Download</button></a>
+          <!-- <a href="#"> <button type="button" class="btn  btn-secondary btn-xs">Share</button></a>        
+          <a href="#"> <button type="button" class="btn  btn-danger btn-xs">Delete</button></a> -->
+      
+        </td>
+      
+          </tr>
+          {% endfor %}
+          </tbody>
+      
+        </table>
+      </div>
+      <!-- /.card-body -->
+      <hr>
+      <div class="card-body">
+        <h5 class="text">Other Versions</h5>
+        <table id="example2" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th></th>
+            <th>File Name</th>
+            <th>Uploaded Date</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for file in versionid %}
+          <tr>
+            <td><a href="{% url 'view_file' file.id %}" > <i class="fas fa-file fa-2x"></i>{{file.upload_file}}</a> 
+            </td>
+                <td>{{file.new_upload}} </td>
+                <td>{{file.entry_date}} </td>
+                
+      
+              <td>   
+          <!-- <a href="#"> <button type="button" class="btn btn-primary btn-xs">Approval</button></a> -->
+          <a href="{{ file.new_upload.url }}" download="{{ file.new_upload.url }}" > <button type="button" class="btn btn-success btn-xs">Download</button></a>
+          <!-- <a href="#"> <button type="button" class="btn  btn-secondary btn-xs">Share</button></a>        
+          <a href="#"> <button type="button" class="btn  btn-danger btn-xs">Delete</button></a> -->
+      
+        </td>
+      
+          </tr>
+          {% endfor %}
+          </tbody>
+      
+        </table>
+      </div>
+      <hr>
+      <div class="card-body col-md-8">
+        <h5 class="text">Audit Logs</h5>
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+           
+            <th>Uploaded Date</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for file in versionid %}
+          <tr>
+           
+      
+                <td>{{file.entry_date}} </td>
+                <td>{{file.new_upload}} </td>
+      
+      
+          </tr>
+          {% endfor %}
+          </tbody>
+      
+        </table>
+      </div>
+    </div>
+    <!-- /.card -->
+
+
+<!-- 
+    <div class="modal-footer justify-content-between">
+      <button type="submit" </i>Update</button>
+    </div> -->
+  </section>
+
+
+{% endblock %}
+
+
+{% block datatable %}
+  
+{% include 'base/simple-js.html' %}
+
+{% endblock datatable %}
+
+{% block content %}
+
+
+{% endblock content %}

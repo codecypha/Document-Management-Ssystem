@@ -1,0 +1,26 @@
+
+{% extends 'base/base.html' %}
+{% load static %}
+{% block header %}
+
+  {% include 'base/header.html' %}
+
+{% endblock %}
+
+{% block stats %}
+{% include 'base/stats.html' %}
+
+{% endblock %}
+
+
+<!-- Use for Data Tables -->
+{% block table %}
+{% include 'app/dash-table.html' %}
+{% endblock %}
+
+
+{% block datatable %}
+  
+{% include 'base/datatable-js.html' %}
+
+{% endblock datatable %}

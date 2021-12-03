@@ -1,0 +1,201 @@
+
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block header %}
+ <!-- DataTables -->
+ <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+ <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+ <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+ <script src="{% static 'dist/js/pages/hide.js' %}"></script>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h6 class="m-0"><b>Section:</b> {{ name}}<br> {{ folder_count}} Folders</h6>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{% url 'home'  %}">Home</a></li>
+            <li class="breadcrumb-item active"><i class="fas fa-folder-open" style="color: #ff922b;"></i>Folder</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+{% endblock %}
+
+<!-- Use for Data Tables -->
+{% block table %}
+<form action="" method="post">
+    {% csrf_token %}
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <!-- /.card -->
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><button type="button" class="btn btn-info btn-block btn-flat" data-toggle="modal" data-target="#modal-lg"><i class="fas fa-plus"></i>Create Folder</button></div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Creator</th>
+                  <th>Retention</th>
+                  <th>Retention Count</th>
+                  <th>Action</th>
+                  <th>Create Date</th>
+                  <th></th>
+                </tr>
+                </thead>
+     
+                <tbody>
+                    {% for folder in folder_list %}
+                <tr>
+                    <td >{{folder.id}}</td>
+                    <td><i class="fas fa-folder fa-2x" style="color: #ff922b;"></i><a href="{% url 'folder' folder.id %}"> {{folder.folder_name}} </a> </td>
+                    <td>{{folder.author}} </td>
+                    <td>{{folder.retention}} </td>
+                    <td>{{folder.retention_count}} {{folder.period}}</td>
+                    {% if folder.retention == 'Always Available' %}
+                    <th style="color: green;">No Action</th>
+                    {% else %}
+                    <th style="color: red;">{{folder.action}}</th>
+                    {% endif %}
+                    <td>{{folder.entry_date}} </td>
+                    <td>   
+                <a href="{% url 'edit_folder' folder.id %}"> <button type="button" class="btn btn-primary btn-xs">Modify</button></a>
+                <a href="{% url 'folder' folder.id %}"> <button type="button" class="btn btn-success btn-xs">Explore</button></a>
+                <a href="#"> <button type="button" class="btn  btn-info btn-xs">Approval</button></a>
+                <!-- <button type="button" class="btn  btn-secondary btn-xs" data-toggle="modal" data-target="#modal-default">Share</button> -->
+                <a href="{% url 'add_to_group' folder.id %}"> <button type="button" class="btn  btn-secondary btn-xs">Share</button></a>
+                <button type="submit" class="btn  btn-danger btn-xs" name='delete_folder' value='{{folder.id}}'>Delete</button>
+        
+            </td>
+             
+                </tr>
+                {% endfor %}
+                </tbody>
+        
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+{% endblock %}
+
+
+{% block datatable %}
+<form action="" method="post">
+  {% csrf_token %}
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <i class="fas fa-warehouse"></i> <h6 class="modal-title">Grant User Access</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card-body">
+          <div class="row">
+              <div class="col-md-12">
+          <div class="form-group">
+           {% render_field form2.username type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="Enter Name Here" %} 
+          </div>
+      </div>
+  </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        {% for folder in folder_list %}
+        {% if forloop.first %}
+        <button type="submit" name='adduser' value='{{folder.group_name}}' class="btn btn-primary btn-xs"><i class='far fa-save'></i>Grant Access</button>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+{% include 'base/simple-js.html' %}
+
+{% endblock datatable %}
+
+{% block content %}
+
+
+<form action="" method="post">
+    {% csrf_token %}
+  <div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-warehouse"></i> <h4 class="modal-title">New Folder</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+            <div class="form-group">
+              {% render_field form.folder_name type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="Enter Name Here" %}
+            </div>
+        </div>
+    </div>
+            <h5>Retention</h5>
+            <p>You can choose to have files in this folder to be automatically set inactive after certain time, or made always available</p>
+            <div class="row">
+                <div class="col-md-6">
+            <div class="form-group">
+                {% render_field form.retention class="custom-select form-control-border border-width-2" id="retention_id"  name='retentions' %}
+
+            </div>
+        </div>
+    </div>      
+    <div class="row" id='retention'>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputBorderWidth2">Afrer</label>
+                    {% render_field form.retention_count type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth23" placeholder="After what duration" %}
+                </div>
+        </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleSelectBorderWidth2">.</label>
+                    {% render_field form.period class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth24" %}
+            </div>
+        </div>
+              <div class="col-md-4">
+                <div class="form-group">
+              <label for="exampleSelectBorderWidth2">Take the following action</label>
+              {% render_field form.action class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth25" %}
+            </div>
+        </div>
+    </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary"><i class='far fa-save'></i>Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+{% endblock content %}

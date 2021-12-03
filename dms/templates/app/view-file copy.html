@@ -1,0 +1,345 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block search %}
+{% include 'base/search.html' %}
+{% endblock %}
+
+{% block content %}
+
+<link href="{% static 'css/but.css' %}" rel="stylesheet"> 
+<link href="{% static 'css/pages/user-card.css' %}" rel="stylesheet">
+<link href="{% static 'js/magnific-popup/dist/magnific-popup.css' %}" rel="stylesheet">
+<div class="reverse-mode">
+    <!-- ============================================================== -->
+    <!-- Left Part  -->
+    <!-- ============================================================== -->
+    <div class="left-part">
+        
+        <!-- Mobile toggle button -->
+        <a class="ti-menu ti-close btn show-left-part d-block hide-on-med-and-up" href="javascript:void(0)"></a>
+
+        <div class="scrollable" style="height:100%;">  
+            <hr>
+            <div class="p-15">
+         
+                
+                    <!-- email -->
+                    <div class="row">
+                        <div class="row">
+                            <h6 class="card-title">Reminders:</h6>
+                            <a class="waves-effect waves-light"><i class="material-icons left">today</i>Add New Reminder</a>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- pwd -->
+                    <div class="row">
+                        <h6 class="card-title">Shared to:</h6>
+                        <a class="waves-effect waves-light"><i class="material-icons left">share</i>Edit</a>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="row">
+                            <h6 class="card-title">Retention:</h6>
+                            <a class="waves-effect waves-light"><i class="material-icons left">screen_lock_landscape</i>Infinite</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row m-t-40">
+                        <div class="col s12">
+                            <button class="btn-small cyan waves-effect waves-light btn2" type="submit" name="action">Lock File
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-40">
+                        <div class="col s12">
+                            <button class="btn-small cyan waves-effect waves-light btn2" type="submit" name="action">Upload New File
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-40">
+                        <div class="col s12 ">
+                            <button class="btn-small cyan waves-effect waves-light btn2 " type="submit" name="action">View Approval Workflow
+                            </button>
+                        </div>
+                    </div>
+            
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Left Part  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right Part  Mail Compose -->
+    <!-- ============================================================== -->
+    <div class="right-part">
+        <div class="p-20">
+
+            <div class="card">
+      
+                <div class="card-content">
+                    <h5 class="card-title"> <i class="fas fa-warehouse m-r-10"></i>File Metadata</h5>
+                    <br>
+                     <div class="row">
+                        <div class="col s1 m2">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="{% static 'images/sample-1.jpg' %}">
+                
+                                </div>
+                          
+                            </div>
+                        </div>
+                        <div class="col s6 m7">
+                                <div>
+                                    <a href="#">{{file_name}}</a>
+                                    
+                            </div>
+                        </div>
+
+                        
+                    </div>
+
+       
+                    
+                    <br>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <div class="row">
+                        <div class="modal-content">
+    
+                                          
+
+                                            <div class="row">
+                                                <div class="input-field col s12 m12 l12">
+                                                    <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                                    {% render_field form.tags type="text" id="icon_prefix" class="validate" disabled='disabled' %}
+                                                    <label for="icon_prefix">Tags</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s9 m6">
+                                                    <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                                    {% render_field form.signed_by type="text" id="icon_prefix" class="validate" disabled='disabled' %}
+                                                    <label for="icon_prefix">Signed By:</label>
+                                                </div>
+
+                                                <div class="input-field col s9 m6">
+                                                    <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                                    {% render_field form.document_id type="text" id="icon_prefix" class="validate" disabled='disabled' %}
+                                                    <label for="icon_prefix">Document ID</label>
+                                                </div>
+                                            </div>
+        
+        
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <div class="input-field">
+                                                        {% render_field form.note id="note" class="materialize-textarea" disabled='disabled' %}
+                                                        
+                                                        <label for="note">Notes</label>
+                                                    </div>
+                                                </div>
+                                   
+                                                <!-- <div class="col s6 m6">
+                                                    <div class="file-field input-field">
+                                                        <div class="btn cyan">
+                                                            <span>File</span>
+                                                            {% render_field form.related_file placeholder="Upload related file" disabled='disabled' %}
+                                                
+                                                        </div>
+                                                        <div class="file-path-wrapper">
+                                                            <input class="file-path validate" type="text" placeholder="Upload related file">
+                                                        </div>
+                                                    </div>
+                                                
+                                            </div>
+         -->
+                                        </div>   
+                           <!-- {% render_field form.upload_file type="file"  placeholder="Upload one or more files"%} -->
+                        
+                        
+                        </div>
+                      
+
+                    </div>
+                    </form>
+                    <br>
+
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <!-- Create Modal Structure -->
+                    <div id="modal2" class="modal">
+                        <div class="modal-content">
+                            <h5 class="card-title"> <i class="fas fa-warehouse m-r-10"></i>New File</h5>
+                            
+                                           
+                                   <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="file-field input-field">
+                                            <div class="btn cyan">
+                                                <span>File</span>
+                                                {% render_field form.new_upload placeholder="Upload file2" %}
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text" placeholder="Upload file">
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+
+                                   
+                                        <div class="input-field col s9 m6">
+                                           <input id="icon_prefix" type="text"  name='fileid1' class="validate" value={{fileid1}}> 
+                                        </div>
+                                </div>
+                                
+        
+                                <div class="modal-footer">
+                                    <button  type="submit" class="modal-action modal-close waves-effect waves-green btn-small indigo white-text "><i class="far fa-save m-r-10"></i>Save</button>
+                                </div>
+                        </div>   
+                           <!-- {% render_field form.upload_file type="file"  placeholder="Upload one or more files"%} -->
+                        </div>
+                    </form> 
+
+                    <h5 class="card-title">Related Files</h5>
+                                      
+                    <div class="table-responsive">
+                        <table id="zero_config" class="responsive-table display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Uploaded Date</th>
+                                    <th>File Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                           
+                            <tbody>
+                                {% for file in versionid %}
+                                <tr id="1" class="gradeX">
+                                
+                                    <!-- <td><i class="small material-icons">folder</i>{{department.department_name}}</td> -->
+                                    <td><a href="{% url 'view_file' file.id %}" > <i class="tiny material-icons">insert_drive_file</i>{{file.upload_file}}</a> 
+                                       </td>
+                            
+                                    <td>{{file.entry_date}} </td>
+                                    <td>{{file.new_upload}} </td>
+                             
+                                    <td>   
+                               
+                                <a href="#"> <button type="button" class="waves-effect waves-light btn-sm btn-round cyan">Approval</button></a>
+                                <a href="#"> <button type="button" class="waves-effect waves-light  btn-round grey">Share</button></a>        
+                                <a href="#"> <button type="button" class="waves-effect waves-light btn-sm btn-round red">Delete</button></a>
+                            </td>
+                             
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                           
+                        </table>
+                    </div>
+
+                    <br>
+                    <hr>
+                    <h5 class="card-title">Other Versions</h5>
+                                      
+                    <div class="table-responsive">
+                        <table id="zero_config" class="responsive-table display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Uploaded Date</th>
+                                    <th>File Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                           
+                            <tbody>
+                                {% for file in versionid %}
+                                <tr id="1" class="gradeX">
+                                
+                                    <!-- <td><i class="small material-icons">folder</i>{{department.department_name}}</td> -->
+                                    <td><a href="{% url 'view_file' file.id %}" > <i class="tiny material-icons">insert_drive_file</i>{{file.upload_file}}</a> 
+                                       </td>
+                            
+                                    <td>{{file.entry_date}} </td>
+                                    <td>{{file.new_upload}} </td>
+                             
+                                    <td>   
+                               
+                                <a href="#"> <button type="button" class="waves-effect waves-light btn-sm btn-round cyan">Approval</button></a>
+                                <a href="#"> <button type="button" class="waves-effect waves-light  btn-round grey">Share</button></a>        
+                                <a href="#"> <button type="button" class="waves-effect waves-light btn-sm btn-round red">Delete</button></a>
+                            </td>
+                             
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                           
+                        </table>
+                    </div>
+
+                    <br>
+                    <hr>
+                    <h5 class="card-title">Audit Logs</h5>
+                                      
+                    <div class="table-responsive">
+                        <table id="zero_config" class="responsive-table display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Uploaded Date</th>
+                                    <th>File Name</th>
+                                  
+                                </tr>
+                            </thead>
+                           
+                            <tbody>
+                                {% for file in versionid %}
+                                <tr id="1" class="gradeX">
+                                
+                                    <!-- <td><i class="small material-icons">folder</i>{{department.department_name}}</td> -->
+                                    <td><a href="{% url 'view_file' file.id %}" > <i class="tiny material-icons">insert_drive_file</i>{{file.upload_file}}</a> 
+                                       </td>
+                            
+                                    <td>{{file.entry_date}} </td>
+                                    <td>{{file.new_upload}} </td>
+                             
+                                 
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                           
+                        </table>
+                    </div>
+                </div>
+          
+            </div>
+            
+        </div>
+        
+        </div>
+        
+    </div>
+    
+</div>
+
+                        
+ 
+
+
+<script src="{% static 'js/magnific-popup/dist/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/magnific-popup/meg.init.js' %}"></script>
+
+    <!-- <script src="{% static  'js/jquery/jquery.min.js' %}"></script>
+    <script src="{% static  'js/custom.min.js' %}"></script> -->
+    <!-- ============================================================== -->
+
+{% endblock %}

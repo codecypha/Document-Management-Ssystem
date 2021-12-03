@@ -1,0 +1,143 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col l12 s12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="d-flex no-block align-items-center">
+                                    <h5 class="card-title">INVENTORY</h5>
+                                    <div class="ml-auto">
+                                        <a class="waves-effect waves-light btn btn-small btn-round green  modal-trigger" href="#modal2">Add Category</a>
+                                    </div>
+                                </div>
+                                <div >
+                                    <div>   
+                                        <div class="row">
+                                            <div class="col s12  m6 l12">
+                                                <div class="card">
+                                                    Filter Category
+                                                    <div class="card-content">
+                            
+                                                        <a class="waves-effect waves-light btn btn-small btn-round orange">All</a>
+                                                        {% for list in category_list %}
+                                                       
+                                                        <a href=" {% url 'item' list.category_name %}" class="waves-effect waves-light btn btn-flat btn-small btn-round "> {{list.category_name}}</a>
+                                                
+                                                        {% endfor %}
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                             
+                                   
+                                
+                            </div>
+                            <div class="table-responsive"> 
+                                    <table id="file_export" class="table table-bordered nowrap display">
+                                        <thead>
+                                            <tr>
+                                                <th> </th>
+                                                <th>Item Name</th>
+                                                <th>Variant</th>
+                                                <th>Cost Price</th>
+                                                <th>Selling Price</th>
+                                                <th>Stock</th>
+                                                <th>SKU</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        {% for items in items_list %}
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                   
+                                                </td>
+                                                <td>
+                                                    {{items.item_name}}
+                                                </td>
+                                                <td>{{items.variant_name}}</td>
+                                                <td>{{items.cost_price}}</td>
+                                                <td>{{items.selling_price}}</td>
+                                                <td>{{items.stock}}</td>
+                                                <td>{{items.sku}}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i class="ti-close" aria-hidden="true"></i></button>
+                                                    
+                                                    <a href="#"> <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline " data-toggle="tooltip" data-original-title="View"><i class="ti-pencil" aria-hidden="true"></i></button></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+        <form action="" method="post">
+                {% csrf_token %}
+            <!-- Create Modal Structure -->
+            <div id="modal2" class="modal">
+                <div class="modal-content">
+                    <h5 class="card-title"> <i class="fas fa-phone-square m-r-10"></i>New Category</h5>
+                    <div class="row">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s9">
+                                    <i class="material-icons prefix">business_center</i>
+                                    <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                    {% render_field form.category_name type="text" id="icon_prefix" class="validate" %}
+                                    <label for="icon_prefix">Enter Name Here</label>
+                                </div>
+ 
+      
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text"><i class="far fa-save m-r-10"></i> Save Contact</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text"><i class="far fa-save m-r-10 btn btn-success"></i> Save Contact</a> -->
+                   
+                    <button  type="submit" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text "><i class="far fa-save m-r-10"></i>Save Category</button>
+                </div>
+            </div>
+        </form>
+
+
+
+
+    <!-- ============================================================== -->
+    <!-- All Required js -->
+    <!-- ============================================================== -->
+    <script src="{% static  'js/jquery/jquery.min.js' %}"></script>
+   
+    <script src="{% static 'extra-libs/DataTables/datatables.min.js' %}"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="{% static 'extra-libs/jquery-datatables-editable/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'extra-libs/tiny-editable/mindmup-editabletable.js' %}"></script>
+    <script src="{% static 'extra-libs/tiny-editable/numeric-input-example.js' %}"></script>
+    <script>
+    $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
+    $('#editable-datatable').editableTableWidget().numericInputExample().find('td:first').focus();
+    $(function() {
+        $('#editable-datatable').DataTable();
+    });
+    </script>
+    
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,250 @@
+
+
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block header %}
+ <!-- DataTables -->
+<!-- <script>
+  $("#hide").onload(function(){
+    $("#retention").hide();
+  });
+  </script> -->
+ <script src="{% static 'dist/js/pages/hide.js' %}"></script>
+
+
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Edit Folder</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Edit Folder</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+{% endblock %}
+
+<!-- Use for Data Tables -->
+{% block table %}
+<section class="content">
+  <form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+     <!-- /.content -->
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                   
+                    <!-- <a  data-toggle="lightbox" data-title="sample 7 - white">{{file_name}} </a> -->
+                    <div class="filtr-item col-sm-4" data-category="1" data-sort="white sample">
+                  <!-- <img src="{{ file_name.url }}" class="img-fluid mb-2" alt="white sample"/>  -->
+                  {% if v2 == 'pdf' %}
+                  <i class="far fa-file-pdf fa-3x" style="color: #ff2b2b;"></i>
+                  {% elif v2 == 'doc' %}
+                  <i class="far fa-file-word fa-3x" style="color: #522bff;"></i>
+                  {% elif v2 == 'docx' %}
+                  <i class="far fa-file-word fa-3x" style="color: #522bff;"></i>
+                  {% elif v2 == 'jpg' %}
+                  <i class="far fa-file-image fa-3x" style="color: #522bff;"></i>
+                  {% elif v2 == 'txt' %}
+                  <i class="far fa-file-alt fa-3x" style="color: #522bff;"></i>
+                  {% elif v2 == 'xlsx' %}
+                  <i class="far fa-file-excel fa-3x" style="color: #522bff;"></i>
+                  {% elif v2 == 'xls' %}
+                  <i class="far fa-file-excel fa-3x" style="color: #522bff;"></i>
+                  {% elif v2 == 'zip' %}
+                  <i class="far fa-file-zip-o fa-3x" style="color: #522bff;"></i>
+                  {% else %}
+                  <i class="far fa-file fa-3x" style="color: #522bff;"></i>
+                  {%endif%}
+                  <h6 class="text-primary text-center">{{file_name}} </h6>
+                  <p>
+                    <a href="#" class="link-black text-sm"><i class="fas fa-link mr-1"></i> View</a>
+                  </p>
+
+                  
+                
+                    </div>
+                  
+      
+          </div>
+            </div>
+
+            
+<div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div>
+                            <a class="card-title"  data-toggle="modal" data-target="#modal-lg" href="#modal-lg"></i>Upload New version</a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <br>
+
+          <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="exampleInputBorderWidth2">File Name</label>
+              <!-- <label for="exampleInputBorderWidth2">Bottom Border only 2px Border <code>.form-control-border.border-width-2</code></label> -->
+                    <input  class="custom-select form-control-border border-width-2" name='v1' value='{{v1}}'>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="exampleInputBorderWidth2">Extension</label>
+              <!-- <label for="exampleInputBorderWidth2">Bottom Border only 2px Border <code>.form-control-border.border-width-2</code></label> -->
+              <input id="name1" type="text" class="custom-select form-control-border border-width-2" name='v2' value='{{v2}}' disabled>   
+            </div>
+                </div>
+            </div>
+           <div class="row">
+                <div class="col-md-12">
+            <div class="form-group">
+                <label for="exampleInputBorderWidth2">Tags</label>
+                {% render_field form.tags class="custom-select form-control-border border-width-2" id="retention_id" placeholder='Seperate tags with comma'  name='retentions' %}
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="exampleInputBorderWidth2">Signed By</label>
+                {% render_field form.signed_by class="custom-select form-control-border border-width-2" id="retention_id"  name='retentions' %}
+
+            </div>
+        </div>
+    
+           </div>
+           
+       
+            <div class="row" >
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="exampleInputBorderWidth2">Notes</label>
+                    {% render_field form.note  class="form-control form-control-border border-width-2" id="exampleInputBorderWidth23" rows='5' %}
+                </div>
+        </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleSelectBorderWidth2">Upload Related Files</label>
+                    {% render_field form.related_file class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth24" %}
+            </div>
+ 
+    </div>
+
+    
+             </div>
+
+
+            <div class="modal-footer justify-content-between">
+          <button type="submit" </i>Update</button>
+        </div>
+      </div>
+    </div>
+</form>
+  </section>
+{% endblock %}
+
+
+{% block datatable %}
+  
+{% include 'base/simple-js.html' %}
+
+{% endblock datatable %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+  <!-- /.content -->
+  <div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-warehouse"></i> <h4 class="modal-title">New File</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+              <!-- <label for="exampleInputBorderWidth2">Bottom Border only 2px Border <code>.form-control-border.border-width-2</code></label> -->
+                    {% render_field form.new_upload class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth24" %}
+                    </div>
+                </div>
+          
+                <!-- <div class="col-md-6">
+                    <div class="form-group">
+                <input  class="custom-select form-control-border border-width-2" name='v1' value='{{v1}}'>
+                    </div>
+                </div> -->
+            </div>
+       
+    <div class="card-body">
+
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Uploaded Date</th>
+            <th>File Name</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for file in versionid %}
+          <tr>
+            <td><a href="{% url 'view_file' file.id %}" > <i class="fas fa-file"></i>{{file.upload_file}}</a> 
+            </td>
+ 
+                <td>{{file.entry_date}} </td>
+                <td>{{file.new_upload}} </td>
+
+              <td>   
+          <a href="#"> <button type="button" class="btn btn-primary btn-xs">Approval</button></a>
+          <a href="{{ file.new_upload.url }}" download="{{ file.new_upload.url }}" > <button type="button" class="btn btn-success btn-xs">Download</button></a>
+          <a href="#"> <button type="button" class="btn  btn-secondary btn-xs">Share</button></a>        
+          <a href="#"> <button type="button" class="btn  btn-danger btn-xs">Delete</button></a>
+     
+        </td>
+     
+          </tr>
+          {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+
+    
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" name='add_ver'><i class='far fa-save'></i>Save</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+</form>
+
+
+<script src="{% static 'dist/js/tagin.min.js' %}"></script>
+{% endblock content %}

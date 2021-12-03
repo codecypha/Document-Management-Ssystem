@@ -1,0 +1,217 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<link href="{% static 'css/pages/user-card.css' %}" rel="stylesheet">
+<link href="{% static 'js/magnific-popup/dist/magnific-popup.css' %}" rel="stylesheet">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                     <div class="row">
+                        <div class="col s1 m1">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="{% static 'images/sample-1.jpg' %}">
+                                    <span class="card-title">Card Title</span>
+                                </div>
+                                <div>
+                                    <a href="#">view</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s6 m7">
+                                <div>
+                                    <a href="#">{{file_name}}</a>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+
+            
+
+                    <div class="row">
+
+                        <div class="col s6 m7">
+                            <div>
+                                <a class="modal-trigger"  href="#modal6">Upload New version</a>
+                        </div>
+                    </div>
+
+                    </div>
+                    
+                    <br>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <div class="row">
+                        <div class="modal-content">
+                            <h5 class="card-title"> <i class="fas fa-warehouse m-r-10"></i>Edit Metadata</h5>
+                                            <div class="row">
+                                                <div class="col s4 m4">
+                                           
+                                                    <div class="input-field">
+                                                        <label for="icon_prefix">File Name</label>
+                                                        <input id="name1" type="text" placeholder="col s10" name='v1' value='{{v1}}'>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="col s2 m1">
+                                                    <div class="input-field">
+                                                        <input id="name1" type="text" placeholder="col s2" name='v2' value='{{v2}}' disabled>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="input-field col s12 m12 l12">
+                                                    <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                                    {% render_field form.tags type="text" id="icon_prefix" class="validate" %}
+                                                    <label for="icon_prefix">Enter Search tag</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s9 m6">
+                                                    <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                                    {% render_field form.signed_by type="text" id="icon_prefix" class="validate" %}
+                                                    <label for="icon_prefix">Signed By:</label>
+                                                </div>
+                                            </div>
+        
+        
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <div class="input-field">
+                                                        {% render_field form.note id="note" class="materialize-textarea" %}
+                                                        
+                                                        <label for="note">Notes</label>
+                                                    </div>
+                                                </div>
+                                   
+                                                <div class="col s6 m6">
+                                                    <div class="file-field input-field">
+                                                        <div class="btn cyan">
+                                                            <span>File</span>
+                                                            {% render_field form.related_file placeholder="Upload related file" %}
+                                                
+                                                        </div>
+                                                        <div class="file-path-wrapper">
+                                                            <input class="file-path validate" type="text" placeholder="Upload related file">
+                                                        </div>
+                                                    </div>
+                                                
+                                            </div>
+        
+                                        </div>   
+                           <!-- {% render_field form.upload_file type="file"  placeholder="Upload one or more files"%} -->
+                        
+                        
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <button class="btn btn-small blue waves-effect waves-light right" type="submit" >Update
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    </form>
+
+
+                    
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <!-- Create Modal Structure -->
+                    <div id="modal6" class="modal">
+                        <div class="modal-content">
+                            <h5 class="card-title"> <i class="fas fa-warehouse m-r-10"></i>New File</h5>
+                            
+                                           
+                                   <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="file-field input-field">
+                                            <div class="btn cyan">
+                                                <span>File</span>
+                                                {% render_field form.new_upload placeholder="Upload file2" %}
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text" placeholder="Upload file">
+                                            </div>
+                                        </div>
+
+
+                                        <h5 class="card-title">Related Files</h5>
+                                      
+                                        <div class="table-responsive">
+                                            <table id="zero_config" class="responsive-table display" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Uploaded Date</th>
+                                                        <th>File Name</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                               
+                                                <tbody>
+                                                    {% for file in versionid %}
+                                                    <tr id="1" class="gradeX">
+                                                    
+                                                        <!-- <td><i class="small material-icons">folder</i>{{department.department_name}}</td> -->
+                                                        <td><a href="{% url 'view_file' file.id %}" > <i class="tiny material-icons">insert_drive_file</i>{{file.upload_file}}</a> 
+                                                           </td>
+                                                
+                                                        <td>{{file.entry_date}} </td>
+                                                        <td>{{file.new_upload}} </td>
+                                                 
+                                                        <td>   
+                                                   
+                                                    <a href="#"> <button type="button" class="waves-effect waves-light btn-sm btn-round cyan">Approval</button></a>
+                                                    <a href="#"> <button type="button" class="waves-effect waves-light  btn-round grey">Share</button></a>        
+                                                    <a href="#"> <button type="button" class="waves-effect waves-light btn-sm btn-round red">Delete</button></a>
+                                                </td>
+                                                 
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                               
+                                            </table>
+                                        </div>
+                    
+                                    
+                                    </div>
+
+                                   
+                                        <div class="input-field col s9 m6">
+                                           <input id="icon_prefix" type="text"  name='fileid1' class="validate" value={{fileid1}}> 
+                                        </div>
+                                </div>
+                                
+        
+                                <div class="modal-footer">
+                                    <button  type="submit" class="modal-action modal-close waves-effect waves-green btn-small indigo white-text "><i class="far fa-save m-r-10"></i>Save</button>
+                                </div>
+                        </div>   
+                           <!-- {% render_field form.upload_file type="file"  placeholder="Upload one or more files"%} -->
+                        </div>
+                    </form> 
+                   
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+<script src="{% static 'js/magnific-popup/dist/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/magnific-popup/meg.init.js' %}"></script>
+<!-- 
+    <script src="{% static  'js/jquery/jquery.min.js' %}"></script>
+    <script src="{% static  'js/custom.min.js' %}"></script> -->
+    <!-- ============================================================== -->
+
+    
+{% endblock %}

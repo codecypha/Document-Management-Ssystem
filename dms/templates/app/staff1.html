@@ -1,0 +1,104 @@
+{% extends 'base/base.html '%}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+ 
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col s12">
+                        <!-- Column -->
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="d-flex no-block align-items-center">
+                                    <h5 class="card-title">INVENTORY</h5>
+                                    <div class="ml-auto">
+                                        <a class="waves-effect waves-light btn blue-green  modal-trigger" href="#modal2">Create Department</a>
+                                        <a class="waves-effect waves-light btn blue-grey  modal-trigger" href="#modal2">Add Item</a>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table striped m-b-20" id="editable-datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Department</th>
+                                                <th>Number of Folders</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            {% for department in department_list %}
+                                            <tr id="1" class="gradeX">
+                                                <td>666</td>
+                                                <td>Internet Explorer 4.0 </td>
+                                                <td>Win 95+</td>
+                                                <td>
+
+
+                                                </td>
+                                           
+                                            </tr>
+                                            
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                <!-- Create Modal Structure -->
+                <div id="modal2" class="modal">
+                    <div class="modal-content">
+                        <h5 class="card-title"> <i class="fas fa-phone-square m-r-10"></i>New Department</h5>
+                        <div class="row">
+                            <form class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s9">
+                                        <i class="material-icons prefix">account_circle</i>
+                                        <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                        {% render_field form.department_name type="text" id="icon_prefix" class="validate" %}
+                                        <label for="icon_prefix">Enter Name Here</label>
+                                    </div>
+     
+          
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text"><i class="far fa-save m-r-10"></i> Save Contact</a>
+                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text"><i class="far fa-save m-r-10 btn btn-success"></i> Save Contact</a> -->
+                       
+                        <button  type="submit" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text "><i class="far fa-save m-r-10"></i>Create</button>
+                    </div>
+                </div>
+            </form>
+ 
+        
+            <script src="{% static  'js/jquery/jquery.min.js' %}"></script>
+
+    <!-- ============================================================== -->
+    <!-- This page plugin js -->
+    <!-- ============================================================== -->
+    <!-- Editable -->
+    <script src="{% static  'extra-libs/jquery-datatables-editable/jquery.dataTables.js' %}"></script>
+    <script src="{% static  'extra-libs/tiny-editable/mindmup-editabletable.js' %}"></script>
+    <script src="{% static  'extra-libs/tiny-editable/numeric-input-example.js' %}"></script>
+
+    <script>
+    $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
+    $('#editable-datatable').editableTableWidget().numericInputExample().find('td:first').focus();
+    $(function() {
+        $('#editable-datatable').DataTable();
+    });
+    </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,112 @@
+
+
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block header %}
+ <!-- DataTables -->
+<!-- <script>
+  $("#hide").onload(function(){
+    $("#retention").hide();
+  });
+  </script> -->
+ <script src="{% static 'dist/js/pages/hide.js' %}"></script>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Edit Folder</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">EditFFolder</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+{% endblock %}
+
+<!-- Use for Data Tables -->
+{% block table %}
+<section class="content">
+  <form action="" method="post">
+    {% csrf_token %}
+  <!-- /.content -->
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+            <div class="form-group">
+              <!-- <label for="exampleInputBorderWidth2">Bottom Border only 2px Border <code>.form-control-border.border-width-2</code></label> -->
+              {% render_field form.folder_name type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="Enter Name Here" %}
+            </div>
+        </div>
+    </div>
+            <h5>Retention</h5>
+            <p>You can choose to have files in this folder to be automatically set inactive after certain time, or made always available</p>
+            <div class="row">
+                <div class="col-md-6">
+            <div class="form-group">
+                {% render_field form.retention class="custom-select form-control-border border-width-2" id="retention_id"  name='retentions' %}
+
+            </div>
+        </div>
+    </div>
+       
+    {% if status  == 'Always Available' %}
+    <div class="row" id='retention' style="display:none">
+      {% else %}
+    <div class="row" id='retention'>
+      {% endif %}
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputBorderWidth2">Afrer</label>
+                    {% render_field form.retention_count type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth23" placeholder="After what duration" %}
+                </div>
+        </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleSelectBorderWidth2">.</label>
+                    {% render_field form.period class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth24" %}
+            </div>
+        </div>
+              <div class="col-md-4">
+                <div class="form-group">
+              <label for="exampleSelectBorderWidth2">Take the following action</label>
+              {% render_field form.action class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth25" %}
+            </div>
+        </div>
+    </div>
+
+    
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="submit" class="btn btn-primary"><i class='far fa-save'></i>Update</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+
+    <!-- /.modal-dialog -->
+
+  <!-- /.modal -->
+</form>
+  </section>
+{% endblock %}
+
+
+{% block datatable %}
+  
+{% include 'base/simple-js.html' %}
+
+{% endblock datatable %}
+
+{% block content %}
+
+
+
+{% endblock content %}

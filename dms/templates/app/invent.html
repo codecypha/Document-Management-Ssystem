@@ -1,0 +1,166 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col l12 s12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="d-flex no-block align-items-center">
+                                    <h5 class="card-title">All Contacts</h5>
+                                    <div class="ml-auto">
+                                        <a class="waves-effect waves-light btn blue-grey darken-4 modal-trigger" href="#modal2">Create New Staff</a>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                   
+                                    <table id="file_export" class="table table-bordered nowrap display">
+                                        <thead>
+                                            <tr>
+                                                <th> </th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Role</th>
+                                                <th>Age</th>
+                                                <th>Joining date</th>
+                                   
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        {% for staff in staff_list %}
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <p>
+                                                        <label class="m-l-15">
+                                                            <input type="checkbox" />
+                                                            <span></span>
+                                                        </label>
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <a href="app-contact-detail.html"><img src="{% static 'images/users/1.jpg' %}" alt="user" class="circle" width="30px" /> {{staff.staff_name}}</a>
+                                                </td>
+                                                <td>{{staff.staff_email}}</td>
+                                                <td>{{staff.staff_phone}}</td>
+                                                <td><span class="label label-danger">Designer</span> </td>
+                                                <td>23</td>
+                                                <td>{{staff.join_date}}</td>
+                                             
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i class="ti-close" aria-hidden="true"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+
+            <form action="" method="post">
+                {% csrf_token %}
+            <!-- Create Modal Structure -->
+            <div id="modal2" class="modal">
+                <div class="modal-content">
+                    <h5 class="card-title"> <i class="fas fa-user m-r-10"></i>New Staff</h5>
+                    <div class="row">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s9">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                                    {% render_field form.staff_name type="text" id="icon_prefix" class="validate" %}
+                                    <label for="icon_prefix">Enter Name Here</label>
+                                </div>
+                                <div class="input-field col s9">
+                                    <i class="material-icons prefix">address</i>
+                                    <!-- <input id="icon_telephone" type="tel" class="validate"> -->
+                                    {% render_field form.staff_address  id="icon_address" class="validate" %}
+                                    <label for="icon_address">Address</label>
+                                </div>
+                                <div class="input-field col s9">
+                                    <i class="material-icons prefix">date</i>
+                                    <!-- <input id="icon_telephone" type="tel" class="validate"> -->
+                                    {% render_field form.staff_dob type="date" id="icon_dob" class="validate" %}
+                                    <label for="icon_dob">Date of Birth</label>
+                                </div>
+                                <div class="input-field col s9">
+                                    <i class="material-icons prefix">phone</i>
+                                    <!-- <input id="icon_telephone" type="tel" class="validate"> -->
+                                    {% render_field form.staff_phone type="tel" id="icon_telephone" class="validate" %}
+                                    <label for="icon_telephone">Telephone</label>
+                                </div>
+                                <div class="input-field col s9">
+                                    <i class="material-icons prefix">email</i>
+                                    <!-- <input id="icon_email" type="email" class="validate"> -->
+                                    {% render_field form.staff_email type="email" id="icon_email" class="validate" %}
+                                    <label for="icon_email">Email</label>
+                                </div>
+                                <div class="input-field col s9">
+                                    <i class="material-icons prefix">date</i>
+                                    {% render_field form.join_date type="date" id="icon_date" class="validate" %}
+                                    <!-- <input id="icon_date" type="date" class="validate"> -->
+                                    <label for="icon_date">Join Date</label>
+                                </div>
+                                <div class="file-field input-field col s9">
+                                    <div class="btn indigo">
+                                        <span>File</span>
+                                        <input type="file">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text"><i class="far fa-save m-r-10"></i> Save Contact</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text"><i class="far fa-save m-r-10 btn btn-success"></i> Save Contact</a> -->
+                   
+                    <button  type="submit" class="modal-action modal-close waves-effect waves-green btn-flat indigo white-text "><i class="far fa-save m-r-10"></i>Save Staff</button>
+                </div>
+            </div>
+        </form>
+
+    <!-- ============================================================== -->
+    <!-- All Required js -->
+    <!-- ============================================================== -->
+    <script src="{% static  'js/jquery/jquery.min.js' %}"></script>
+   
+    <script src="{% static 'extra-libs/DataTables/datatables.min.js' %}"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="{% static 'js/dataTables.buttons.min.js' %}"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+    <script>
+    //=============================================//
+    //    File export                              //
+    //=============================================//
+    $('#file_export').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    });
+    </script>
+
+
+
+
+
+{% endblock %}
