@@ -423,6 +423,7 @@ def view_file(request, pk):
     document_id = fileid.document_id
     folder_id = fileid.folder_id
     file_id = fileid.file_id
+    fileid_new = pk
     department_id = fileid.department_id
     versionid = VersionUpload.objects.filter(file_id=file_id)
     form = FileForm(instance=fileid)
@@ -441,7 +442,7 @@ def view_file(request, pk):
             res.file_id = file_id
             #res.save()
             return redirect('department')
-    context = {"form":form, "file_name":file_name,"document_id":document_id, 'fileid1':fileid1, "versionid":versionid, "fileid":fileid}
+    context = {"form":form, "file_name":file_name,"document_id":document_id, 'fileid1':fileid1, "versionid":versionid, "fileid":fileid, "fileid_new":fileid_new}
     return render(request, 'app/view-file.html', context)
 
 
@@ -450,7 +451,6 @@ def view_file(request, pk):
 def edit_file(request, pk):
     #fold_id = val()
     fileid = FileType.objects.get(id=pk)
-    print(fileid)
     file_name = fileid.upload_file
     department_id = fileid.department_id
     folder_id = fileid.folder_id
