@@ -1,5 +1,4 @@
 from django.db import models
-from taggit.managers import TaggableManager
 
 # Create your models here.
 
@@ -17,6 +16,7 @@ class Department(models.Model):
     )
 
     retention_count = models.CharField(max_length=220, default=0)
+    
     action_choices = [
         ('Delete Permently', 'Delete Permently'),
         ('Set Inactive', 'Set Inactive'),
@@ -43,8 +43,9 @@ class Department(models.Model):
     group_name = models.CharField(max_length=125, blank=True)
     entry_date  = models.DateField(auto_now=True)
     update_date  = models.DateField(auto_now_add=True)
+    status = models.CharField(max_length=10, default='active')
     def __str__(self):
-        return self.department_name
+        return self.retention
 
 
 
@@ -113,6 +114,7 @@ class FileType(models.Model):
     new_upload = models.FileField(blank=True, null=True)
     entry_date  = models.DateTimeField(auto_now=True)
     update_date  = models.DateField(auto_now_add=True)
+ 
     def __str__(self):
         return self.file_id
 

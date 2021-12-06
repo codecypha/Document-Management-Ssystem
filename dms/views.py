@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import Department, Folder, FileType, VersionUpload, GroupManagement, AddUserGroup, AddUserDept, AddUserFolder
+from dms.models import Department, Folder, FileType, VersionUpload, GroupManagement, AddUserGroup, AddUserDept, AddUserFolder
 from .forms import DepartmentForm, FolderForm, FileForm, VersionForm, ManagementForm,AddUserForm, AddUserDeptForm, AddUserFolderForm
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from taggit.models import Tag
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import Group, User
 # from pyad import *
@@ -21,8 +20,13 @@ import win32com.client
 import fitz
 from django.db.models import Q
 from itertools import chain
-
-
+#from .tasks import job
+from datetime import datetime
+import datetime
+from django.utils import timezone
+from datetime import date
+today = date.today()
+d2  = today.strftime("%Y")
 
 # Create your views here.
 @unauthenticated_user
@@ -50,10 +54,11 @@ def logoutPage(request):
 
 @login_required(login_url  ='login')
 def home(request):
+
     group_id = ''
     author = request.user  
-    department_list = Department.objects.filter(author=author)
-    department_count = Department.objects.filter(author=author).count()   
+    department_list = Department.objects.filter(author=author, status='active')
+    department_count = Department.objects.filter(author=author, status='active').count()   
     folder_count = Folder.objects.filter(author=author).count()  
     file_count = FileType.objects.filter(author=author).count()    
     access_count = AddUserFolder.objects.raw(""" SELECT a.id, count(a.id) count FROM dms_adduserfolder a, dms_adduserdept b 
@@ -77,16 +82,13 @@ def department1(request):
     dept_users=[] 
     for dept_group in my_group:  
         dept_users.append(str(dept_group))
-        dept_id = Department.objects.filter(group_name=dept_group).exists()
+        dept_id = Department.objects.filter(group_name=dept_group, status='active').exists()
         if dept_id == True:
             group_id = 'allow_for_section'
          
             context = {"group_id":group_id} 
-    department_count = Department.objects.all().count()
-    department_list = Department.objects.all()
-    #get country
-    #country = "Ghana"
-  
+    department_count = Department.objects.filter(status='active').count()
+    department_list = Department.objects.filter(status='active')
     form = DepartmentForm()
     form2 = AddUserForm()
     if request.method == 'POST' and 'adduser' not in request.POST:
@@ -101,10 +103,6 @@ def department1(request):
             dept = form.save()
             dept.group_name = group_name
             dept.save()
-            # Group.objects.create(name=group_name)
-            # user = User.objects.get(username = my_user)
-            # user_group = Group.objects.get(name=group_name)
-            # user_group.user_set.add(user)
             messages.success(request, "Section with the name " + department_name + " has been created")
             return redirect('department')
 
@@ -129,7 +127,7 @@ def department(request):
     request.session['add_route'] = add_route
     author  = request.user
     user_name = str(author)
-    qs1 = Department.objects.filter(author=author)
+    qs1 = Department.objects.filter(author=author, status='active')
     qs = AddUserDept.objects.filter(username=author) 
     for item in qs:
         department_name  = item.department_name
@@ -148,22 +146,26 @@ def department(request):
       
     form = DepartmentForm()
     form2 = AddUserForm()
+    status=''
     if request.method == 'POST' and 'adduser' not in request.POST:
         form = DepartmentForm(request.POST)
         group_name = request.POST.get('department_name')
+        retention = request.POST.get('retention')   
+        # if retention != 'Always Available':
+        #     status = 'inactive'
+        # else:
+        #     status = 'active'
         request.session['group_name'] = group_name
         group_name = str(group_name)
         if form.is_valid():
-        
+ 
             dept = form.save(commit=False)
             dept.group_name = group_name
             dept.author = author
+           # dept.status = status
             dept.save()
             dept2 = AddUserDept(creator = author, username = author, department_name=group_name)
             dept2.save()
-            # g1 = Group.objects.create(name=group_name)  
-            # user_group = Group.objects.get(name=group_name)
-            # user_group.user_set.add(user)
             return redirect('department')
 
     
@@ -175,11 +177,7 @@ def department(request):
         user = User.objects.get(username = username)
         user_group = Group.objects.get(name=group_name)
         user_group.user_set.add(user)
-  
         return redirect('department')
-      
-
-
     context = {"form":form,"form2":form2, "groups_list":groups_list,  "add_route":add_route}
     return render(request, 'app/department.html', context)
 
@@ -240,7 +238,6 @@ def view_department1(request, pk):
         folder = Folder.objects.get(id=folder_id)
         folder.delete()
         return redirect(view_department, pk=pk)
-
     if request.method == 'POST'and 'delete_folder' not in request.POST and 'adduser' not in request.POST:
         action = request.POST.get('action')
         department_name = request.POST.get('department_name')
@@ -260,8 +257,7 @@ def view_department1(request, pk):
             form2 = AddUserForm()
             return redirect('view_department', pk=pk)
     if request.method == 'POST' and 'adduser' in request.POST and 'delete_folder' not in request.POST:
-        group_name = request.POST['adduser']
-        
+        group_name = request.POST['adduser']  
         username = request.POST.get('username')
         user = User.objects.get(username = username)
         user_group = Group.objects.get(name=group_name)
@@ -280,10 +276,10 @@ def view_department(request, pk):
     request.session['department_id'] = department_id
     author  = request.user
     user_name = str(author)
-    folder_count = Folder.objects.filter(department_id=pk).count()
-    
+    folder_count = Folder.objects.filter(department_id=pk).count()  
     dept_qs = Department.objects.get(id=department_id)
     department_name  = dept_qs.department_name
+    departmentname =  str(department_name)
     owner = dept_qs.author
     qs = AddUserDept.objects.filter(creator=owner, department_name=department_name, username=author)
     if  qs.exists():
@@ -291,15 +287,17 @@ def view_department(request, pk):
         folder_list = AddUserFolder.objects.raw(""" SELECT distinct(a.id) id, a.folder_name folder_name, retention, retention_count, ACTION, 
                                 period, a.entry_date, author FROM  dms_adduserfolder b, dms_folder a 
                                 WHERE folder_access = 'full'
+                                AND a.group_name = %s
                                 AND a.folder_name = b.folder_name
-                                and b.username= %s """, [user_name] )
+                                and b.username= %s """, [departmentname, user_name] )
 
     else:
         folder_list = AddUserFolder.objects.raw(""" SELECT distinct(a.id) id, a.folder_name folder_name, retention, retention_count, ACTION, 
                                 period, a.entry_date, author FROM  dms_adduserfolder b, dms_folder a 
                                 WHERE folder_access = 'partial'
+                                AND a.group_name = %s
                                 AND a.folder_name = b.folder_name
-                                and b.username= %s""", [user_name] )
+                                and b.username= %s""", [departmentname, user_name] )
     form = FolderForm()
     form2 = AddUserForm()
     if request.method == 'POST' and 'adduser' not in request.POST:
@@ -743,3 +741,22 @@ def searchdoc(request):
     return render(request, 'app/searchdoc.html', context)
 
     
+# import schedule
+# import time
+
+# def job():
+#     print("I am working ...")
+    
+# schedule.every(10).seconds.do(job)
+# schedule.every(10).minutes.do(job)
+# schedule.every().hour.do(job)
+# schedule.every().day.at("10:30").do(job)
+# schedule.every(5).to(10).minutes.do(job)
+# schedule.every().monday.do(job)
+# schedule.every().monday.at("10:30").do(job)
+# schedule.every().minute.at(":17").do(job)
+
+
+# while 1:
+#     schedule.run_pending()
+#     time.sleep(1)

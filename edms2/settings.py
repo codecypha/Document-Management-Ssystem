@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'dms',
     'widget_tweaks',
     'crispy_forms',
+    
+    # other apps
+    'django_q',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -140,3 +143,13 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# settings.py example
+Q_CLUSTER = {
+    "name": "shop",
+    'timeout': 30,
+    'retry': 60,
+    "orm": "default",  # Use Django's ORM + database for broker
+}
+

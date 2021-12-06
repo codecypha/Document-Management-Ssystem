@@ -5,7 +5,7 @@ class DepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
         fields = ('__all__')
-        exclude=['country']
+        exclude=['country', 'status']
 
         
 class FolderForm(forms.ModelForm):  
