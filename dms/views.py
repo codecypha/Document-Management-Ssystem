@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from dms.models import Department, Folder, FileType, VersionUpload, GroupManagement, AddUserGroup, AddUserDept, AddUserFolder
-from .forms import DepartmentForm, FolderForm, FileForm, VersionForm, ManagementForm,AddUserForm, AddUserDeptForm, AddUserFolderForm
+from dms.models import Department, Folder, FileType, VersionUpload, GroupManagement, AddUserGroup, AddUserDept, AddUserFolder, RelatedUpload
+from .forms import DepartmentForm, FolderForm, FileForm, VersionForm, ManagementForm,AddUserForm, AddUserDeptForm, AddUserFolderForm, RelatedForm
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ObjectDoesNotExist
@@ -426,6 +426,7 @@ def view_file(request, pk):
     fileid_new = pk
     department_id = fileid.department_id
     versionid = VersionUpload.objects.filter(file_id=file_id)
+    Relatedid = RelatedUpload.objects.filter(file_id=file_id)
     form = FileForm(instance=fileid)
     form2 = VersionForm(request.POST or None, request.FILES or None)
     if request.method == 'POST':
@@ -442,13 +443,14 @@ def view_file(request, pk):
             res.file_id = file_id
             #res.save()
             return redirect('department')
-    context = {"form":form, "file_name":file_name,"document_id":document_id, 'fileid1':fileid1, "versionid":versionid, "fileid":fileid, "fileid_new":fileid_new}
+    context = {"form":form, "file_name":file_name,"document_id":document_id, 'fileid1':fileid1, "versionid":versionid, "fileid":fileid, "fileid_new":fileid_new, "Relatedid":Relatedid}
     return render(request, 'app/view-file.html', context)
 
 
 
 @login_required(login_url  ='login')
 def edit_file(request, pk):
+
     #fold_id = val()
     fileid = FileType.objects.get(id=pk)
     file_name = fileid.upload_file
@@ -460,15 +462,19 @@ def edit_file(request, pk):
     fileid1 = fileid.id
     document_id = fileid.document_id
     folder_id = fileid.folder_id
+
     file_id = fileid.file_id
     versionid = VersionUpload.objects.filter(file_id=file_id)
+    Relatedid = RelatedUpload.objects.filter(file_id=file_id)
     # for fileid2 in versionid:
     #     fileid2 = fileid.id
     #     print(fileid)
     form2 = VersionForm(request.POST or None, request.FILES or None)
+    form3 = RelatedForm(request.POST or None, request.FILES or None)
     form = FileForm(instance=fileid)
     #department_id = folder_log.department_id
-    if request.method == 'POST' and 'add_ver' not in request.POST:
+    if request.method == 'POST' and 'update' in request.POST:
+        print("add update")
         v1 = request.POST.get('v1')
         v2 = '.'+ v2
         upload_file2 = v1 + v2
@@ -480,8 +486,9 @@ def edit_file(request, pk):
             res.upload_file = upload_file2
             res.folder_id = folder_id
             res.save()
-            return redirect(folder, pk=fold_id)
+            return redirect(folder, pk=folder_id)
     if request.method == 'POST' and 'add_ver' in request.POST: 
+        print("add version")
         if form2.is_valid():
             form2 = VersionForm(request.POST or None, request.FILES or None)
             res2 = form2.save()
@@ -492,7 +499,20 @@ def edit_file(request, pk):
             res2.file_name = file_name
             res2.save()
             return redirect(edit_file, pk=pk)
-    context = {"form":form, "file_name":file_name, "v1":v1, "v2":v2, "document_id":document_id, 'fileid1':fileid1, "versionid":versionid}
+        
+    if request.method == 'POST' and 'add_related' in request.POST: 
+        print("add related")
+        if form3.is_valid():
+            form3 = RelatedForm(request.POST or None, request.FILES or None)
+            res2 = form3.save()
+            res2.document_id = document_id
+            res2.department_id = department_id
+            res2.folder_id = folder_id
+            res2.file_id = file_id
+            res2.file_name = file_name
+            res2.save()
+            return redirect(edit_file, pk=pk)
+    context = {"form":form, "file_name":file_name, "v1":v1, "v2":v2, "document_id":document_id, 'fileid1':fileid1, "versionid":versionid, "Relatedid":Relatedid}
     return render(request, 'app/edit-file.html', context)
 
 

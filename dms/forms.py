@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Department,  Folder, FileType, VersionUpload, GroupManagement, AddUserGroup, AddUserDept, AddUserFolder
+from .models import Department,  Folder, FileType, VersionUpload, GroupManagement, AddUserGroup, AddUserDept, AddUserFolder, RelatedUpload
 class DepartmentForm(forms.ModelForm):  
     class Meta:
         model = Department
@@ -28,6 +28,12 @@ class VersionForm(forms.ModelForm):
         fields = ('__all__')
         exclude=['document_id', 'file_id']
 
+
+class RelatedForm(forms.ModelForm):  
+    class Meta:
+        model = RelatedUpload
+        fields = ('__all__')
+        exclude=['document_id', 'file_id']
 
 
 class ManagementForm(forms.ModelForm):

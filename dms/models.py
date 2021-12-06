@@ -132,6 +132,19 @@ class VersionUpload(models.Model):
         return self.file_id
 
 
+class RelatedUpload(models.Model):
+    author = models.CharField(max_length=220, blank = True)
+    new_upload = models.FileField()
+    department_id = models.CharField(max_length=220, blank=True)
+    file_id = models.CharField(max_length=220, default='NA')
+    folder_id = models.CharField(max_length=220, blank=True)
+    document_id = models.CharField(max_length=220, blank=True, null=True)
+    entry_date  = models.DateTimeField(auto_now=True)
+    update_date  = models.DateField(auto_now_add=True)
+    def __str__(self):
+        return self.file_id
+
+
 class Approvals(models.Model):
     author = models.CharField(max_length=220, blank = True)
     department_id = models.CharField(max_length=220, blank=True)

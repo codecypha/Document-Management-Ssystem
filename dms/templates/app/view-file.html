@@ -124,7 +124,7 @@
       <hr>
       <div class="card-body">
         <h5 class="text ">Related Files</h5>
-        <table  class="table table-bordered table-striped">
+        <table id="example3" class="table table-bordered table-striped">
           <thead>
           <tr>
             <th></th>
@@ -135,9 +135,9 @@
           </tr>
           </thead>
           <tbody>
-              {% for file in versionid %}
+              {% for file in Relatedid %}
           <tr>
-            <td><a href="{% url 'view_file' file.id %}" > <i class="fas fa-file fa-2x"></i>{{file.upload_file}}</a> 
+            <td><a  > <i class="fas fa-file fa-2x"></i>{{file.upload_file}}</a> 
             </td>
                <td>{{file.new_upload}} </td>
                 <td>{{file.entry_date}} </td>
@@ -173,7 +173,7 @@
           <tbody>
               {% for file in versionid %}
           <tr>
-            <td><a href="{% url 'view_file' file.id %}" > <i class="fas fa-file fa-2x"></i>{{file.upload_file}}</a> 
+            <td><a > <i class="fas fa-file fa-2x"></i>{{file.upload_file}}</a> 
             </td>
                 <td>{{file.new_upload}} </td>
                 <td>{{file.entry_date}} </td>
