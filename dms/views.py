@@ -5,8 +5,8 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import Group, User
-# from pyad import *
-# from pyad import aduser
+#from pyad import *
+#from pyad import aduser
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowerd_users
@@ -651,14 +651,14 @@ def add_to_group(request, pk):
 
 @login_required(login_url  ='login')
 def searchdoc(request):
-    filepath = 'media\Payment-Specification_update.pdf'
-    with fitz.open(filepath) as doc:
-        text = ""
-        for page in doc:
-            text += page.getText().strip()
-            if 'VALUE_DATE6' in text:
-                print('okay')
-       # return text
+    # filepath = 'media\'
+    # with fitz.open(filepath) as doc:
+    #     text = ""
+    #     for page in doc:
+    #         text += page.getText().strip()
+    #         if 'VALUE_DATE6' in text:
+    #             print('okay')
+    #    # return text
 
     location2 = ''
     location1 = ''
@@ -670,9 +670,12 @@ def searchdoc(request):
         search2 = search.lower()
         search3 = search.upper() 
     arr = os.listdir('media')
+    
     files = []
     for ar2 in arr:
+        
         files.append(str(ar2))
+    
     search_content1 =[]
     search_content3 =[]
     search_content4 = []
@@ -707,7 +710,7 @@ def searchdoc(request):
             with fitz.open(filepath) as doc:
                 text = ""
                 for page in doc:
-                    text += page.getText().strip()
+                    text += page.get_text().strip()
                 if search1 in text or search2 in text or search3 in text:
                     location1  = filed
                     if location1 not in search_content3:
@@ -721,16 +724,19 @@ def searchdoc(request):
             import pytesseract
             filed= ar2
             filepath  = ("media/" + filed)
-            pytesseract.pytesseract.tesseract_cmd = r'C:/Users/Kolawole Bayode/AppData/Local/Programs/Tesseract-OCR/tesseract.exe'
+            pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
             text = pytesseract.image_to_string(Image.open(filepath))
             search_content4.append(filed)
         else:
+            
             results = FileType.objects.filter(Q(tags__contains=search1) | Q(tags__contains=search2) | Q(tags__contains=search3) | Q(upload_file__contains=search1) | Q(upload_file__contains=search2) | Q(upload_file__contains=search3))
             results2  = FileType.objects.filter(Q(note__contains=search1) | Q( note__contains=search2) | Q( note__contains=search3) | Q( signed_by__contains=search1) | Q( signed_by__contains=search2) | Q( signed_by__contains=search3))
            # results3  = Folder.objects.filter(Q(folder_name__contains=search1) | Q( folder_name__contains=search2) | Q( folder_name__contains=search3))
             total_result = results | results2 
+        
             for result in total_result:
                 location = result.upload_file
+                print(location)
                 if location not in search_content5:
                     search_content5.append(location)
           
